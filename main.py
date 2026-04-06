@@ -2,10 +2,10 @@ import streamlit as st
 import time
 import base64
 
-# --- SETUP TAMPILAN ---
-st.set_page_config(page_title="JOKO SEARCH", page_icon="🔍")
+# --- KONFIGURASI HALAMAN ---
+st.set_page_config(page_title="JOKO SEARCH", page_icon="🔍", layout="centered")
 
-# Fungsi rahasia buat muter suara otomatis
+# Fungsi untuk memutar audio otomatis saat tombol ditekan
 def play_audio(file_path):
     with open(file_path, "rb") as f:
         data = f.read()
@@ -17,67 +17,55 @@ def play_audio(file_path):
             """
         st.markdown(md, unsafe_allow_html=True)
 
-# CSS buat Animasi Sticker Geser & Tampilan Ala Google
+# --- CSS CUSTOM (Biar Tampilan Elegan & Minimalis) ---
 st.markdown("""
     <style>
+    .main {
+        background-color: #fcfcfc;
+    }
+    .title-text {
+        text-align: center;
+        font-family: 'Helvetica Neue', sans-serif;
+        font-size: 55px;
+        font-weight: 800;
+        letter-spacing: -2px;
+        color: #1a1a1a;
+        margin-bottom: 10px;
+    }
+    .subtitle-text {
+        text-align: center;
+        color: #666;
+        margin-bottom: 40px;
+        font-style: italic;
+    }
+    .stTextInput > div > div > input {
+        border-radius: 30px;
+        padding: 25px;
+        border: 2px solid #eee;
+        transition: 0.3s;
+    }
+    .stTextInput > div > div > input:focus {
+        border: 2px solid #1a1a1a;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
     @keyframes slideIn {
-        0% { transform: translateX(-100%); opacity: 0; }
+        0% { transform: translateX(-120%); opacity: 0; }
         100% { transform: translateX(0); opacity: 1; }
     }
     .sticker-anim {
-        animation: slideIn 1.2s ease-out forwards;
+        animation: slideIn 0.8s ease-out forwards;
         width: 100%;
-        max-width: 400px;
+        max-width: 450px;
         display: block;
-        margin: 20px auto;
-    }
-    .stButton>button {
-        width: 100%;
-        border-radius: 20px;
-    }
-    .logo-text {
-        text-align: center;
-        font-size: 50px;
-        font-weight: bold;
-        margin-bottom: 20px;
-        font-family: 'Arial';
+        margin: 30px auto;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
     }
     </style>
     """, unsafe_allow_html=True)
 
-# --- FOTO PRABOWO BISIK-BISIK ---
-col1, col2, col3 = st.columns([1, 2, 1])
-with col2:
-    st.image("bisik.png", use_container_width=True)
+# --- TAMPILAN UTAMA ---
+st.markdown('<div class="title-text">JOKO SEARCH</div>', unsafe_allow_html=True)
+st.markdown('<div class="subtitle-text">Pusat Informasi Terpercaya (Mungkin)</div>', unsafe_allow_html=True)
 
-# --- LOGO JOKO SEARCH WARNA-WARNI ---
-st.markdown('<div class="logo-text">'
-            '<span style="color: #4285F4;">J</span><span style="color: #EA4335;">O</span>'
-            '<span style="color: #FBBC05;">K</span><span style="color: #34A853;">O</span>'
-            ' <span style="color: #4285F4;">S</span><span style="color: #EA4335;">E</span>'
-            '<span style="color: #FBBC05;">A</span><span style="color: #34A853;">R</span>'
-            '<span style="color: #4285F4;">C</span><span style="color: #EA4335;">H</span>'
-            '</div>', unsafe_allow_html=True)
-
-# --- KOTAK PENCARIAN ---
-query = st.text_input("", placeholder="Tanyakan apa saja ke Pak Joko...", label_visibility="collapsed")
-
-if st.button("Joko Search"):
-    if query:
-        with st.spinner('Menghubungi Istana Bogor...'):
-            time.sleep(1.5)
-        
-        # Mainkan Suara
-        play_audio("sound.mp3")
-
-        # Munculkan Sticker dengan Animasi Geser
-        with open("sticker.png", "rb") as f:
-            img_data = f.read()
-            img_b64 = base64.b64encode(img_data).decode()
-            st.markdown(f'<img src="data:image/png;base64,{img_b64}" class="sticker-anim">', unsafe_allow_html=True)
-            
-        st.balloons()
-    else:
-        st.warning("Isi dulu pertanyaannya, Mas!")
-
-st.markdown("<br><p style='text-align: center; color: gray; font-size: 10px;'>© 2026 JOKO SEARCH - Yo Ndak Tau Kok Tanya Saya</p>", unsafe_allow_html=True)
+# Input pencarian (bisa sepanjang
