@@ -88,4 +88,3 @@ if search_clicked:
         # 1. Mainkan Suara
         try:
             play_audio("sound.mp3")
-        except:
