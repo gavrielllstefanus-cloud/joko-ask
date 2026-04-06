@@ -1,23 +1,23 @@
 import streamlit as st
 import time
 import base64
+import os
 
 # --- CONFIG ---
 st.set_page_config(page_title="JOKO SEARCH", page_icon="🔍")
 
-# Fungsi Audio yang lebih kuat biar bunyi
+# Fungsi Audio Otomatis
 def play_audio(file_path):
-    with open(file_path, "rb") as f:
-        data = f.read()
-        b64 = base64.b64encode(data).decode()
-        # Pakai iframe tersembunyi supaya auto-play lebih galak di beberapa browser
-        md = f"""
-            <iframe src="data:audio/mp3;base64,{b64}" allow="autoplay" style="display:none" id="iframeAudio"></iframe>
-            <audio autoplay="true">
-                <source src="data:audio/mp3;base64,{b64}" type="audio/mp3">
-            </audio>
-            """
-        st.markdown(md, unsafe_allow_html=True)
+    if os.path.exists(file_path):
+        with open(file_path, "rb") as f:
+            data = f.read()
+            b64 = base64.b64encode(data).decode()
+            md = f"""
+                <audio autoplay="true">
+                    <source src="data:audio/mp3;base64,{b64}" type="audio/mp3">
+                </audio>
+                """
+            st.markdown(md, unsafe_allow_html=True)
 
 # --- CSS TAMPILAN ---
 st.markdown("""
@@ -26,11 +26,10 @@ st.markdown("""
     .joko-header {
         text-align: center;
         font-family: 'Arial Black', sans-serif;
-        font-size: 50px;
+        font-size: 45px;
         color: #202124;
-        margin-top: 20px;
+        margin-bottom: 20px;
     }
-    /* Kotak Input & Tombol Search */
     .stTextInput > div > div > input {
         border-radius: 24px 0 0 24px !important;
         padding: 25px !important;
@@ -42,49 +41,55 @@ st.markdown("""
         height: 52px !important;
         width: 60px !important;
         border: none !important;
-    }
-    @keyframes slideFromLeft {
-        0% { transform: translateX(-100%); opacity: 0; }
-        100% { transform: translateX(0); opacity: 1; }
+        margin-top: 0px !important;
     }
     .hasil-joko {
-        animation: slideFromLeft 0.8s ease-out;
         display: block;
-        margin: 30px auto;
-        max-width: 400px;
-        border-radius: 12px;
-        box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        margin: 20px auto;
+        max-width: 100%;
+        border-radius: 10px;
+        animation: slideIn 0.8s ease-out;
+    }
+    @keyframes slideIn {
+        0% { transform: translateX(-100%); opacity: 0; }
+        100% { transform: translateX(0); opacity: 1; }
     }
     </style>
     """, unsafe_allow_html=True)
 
-# --- FOTO BISIK (DI PALING ATAS) ---
-col_1, col_2, col_3 = st.columns([1, 2, 1])
-with col_2:
-    try:
-        st.image("bisik.png", use_container_width=True)
-    except:
-        st.error("File bisik.png nggak ketemu di GitHub, Faldo!")
+# --- FOTO HEADER (BISIK.PNG) ---
+if os.path.exists("bisik.png"):
+    st.image("bisik.png", use_container_width=True)
+else:
+    st.warning("File 'bisik.png' belum ada di GitHub kamu, Faldo!")
 
-# --- JUDUL ---
 st.markdown('<div class="joko-header">JOKO SEARCH</div>', unsafe_allow_html=True)
-st.markdown("<p style='text-align: center; color: #5f6368; margin-bottom: 30px;'>Cari jawaban maut di sini.</p>", unsafe_allow_html=True)
 
-# --- LAYOUT SEARCH ---
-c_space, c_input, c_btn, c_space2 = st.columns([1, 4, 0.6, 1])
-
-with c_input:
-    query = st.text_input("", placeholder="Tulis rahasia negara...", label_visibility="collapsed")
-
-with c_btn:
+# --- INPUT & TOMBOL ---
+c1, c2, c3, c4 = st.columns([1, 4, 0.7, 1])
+with c2:
+    query = st.text_input("", placeholder="Tuliskan rahasia yang ingin Anda cari...", label_visibility="collapsed")
+with c3:
     search_clicked = st.button("🔍")
 
-# --- LOGIKA ---
+# --- LOGIKA SEARCH ---
 if search_clicked:
     if query:
-        with st.spinner('Menunggu bisikan istana...'):
-            time.sleep(1.2)
+        with st.spinner('Menghubungi pusat data...'):
+            time.sleep(1)
         
-        # 1. Mainkan Suara
-        try:
-            play_audio("sound.mp3")
+        # Putar Suara
+        play_audio("sound.mp3")
+
+        # Munculkan Sticker
+        if os.path.exists("sticker.png"):
+            with open("sticker.png", "rb") as f:
+                img_data = f.read()
+                img_b64 = base64.b64encode(img_data).decode()
+                st.markdown(f'<img src="data:image/png;base64,{img_b64}" class="hasil-joko">', unsafe_allow_html=True)
+        else:
+            st.warning("### 🤫 YO NDAK TAU KOK TANYA SAYA!")
+            
+        st.balloons()
+    else:
+        st.info("Ketik sesuatu dulu, Mas!")
