@@ -41,7 +41,6 @@ st.markdown("""
         height: 52px !important;
         width: 60px !important;
         border: none !important;
-        margin-top: 0px !important;
     }
     .hasil-joko {
         display: block;
@@ -60,15 +59,13 @@ st.markdown("""
 # --- FOTO HEADER (BISIK.PNG) ---
 if os.path.exists("bisik.png"):
     st.image("bisik.png", use_container_width=True)
-else:
-    st.warning("File 'bisik.png' belum ada di GitHub kamu, Faldo!")
 
 st.markdown('<div class="joko-header">JOKO SEARCH</div>', unsafe_allow_html=True)
 
 # --- INPUT & TOMBOL ---
 c1, c2, c3, c4 = st.columns([1, 4, 0.7, 1])
 with c2:
-    query = st.text_input("", placeholder="Tuliskan rahasia yang ingin Anda cari...", label_visibility="collapsed")
+    query = st.text_input("", placeholder="Tuliskan rahasia yang ingin Anda cari...", key="search_input", label_visibility="collapsed")
 with c3:
     search_clicked = st.button("🔍")
 
@@ -78,10 +75,10 @@ if search_clicked:
         with st.spinner('Menghubungi pusat data...'):
             time.sleep(1)
         
-        # Putar Suara
+        # 1. Putar Suara
         play_audio("sound.mp3")
 
-        # Munculkan Sticker
+        # 2. Munculkan Sticker
         if os.path.exists("sticker.png"):
             with open("sticker.png", "rb") as f:
                 img_data = f.read()
@@ -91,5 +88,9 @@ if search_clicked:
             st.warning("### 🤫 YO NDAK TAU KOK TANYA SAYA!")
             
         st.balloons()
+        
+        # 3. BAGIAN PENTING: Tunggu 5 detik, lalu menghilang (Rerun)
+        time.sleep(5)
+        st.rerun() 
     else:
         st.info("Ketik sesuatu dulu, Mas!")
