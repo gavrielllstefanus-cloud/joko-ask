@@ -17,7 +17,7 @@ def play_audio(file_path):
             """
         st.markdown(md, unsafe_allow_html=True)
 
-# --- CSS BIAR GAK DOWNGRADE ---
+# --- CSS BIAR LOGO DI KANAN ---
 st.markdown("""
     <style>
     .stApp {
@@ -26,79 +26,59 @@ st.markdown("""
     .joko-header {
         text-align: center;
         font-family: 'Arial Black', sans-serif;
-        font-size: 70px;
+        font-size: 60px;
         color: #202124;
-        margin-top: 50px;
-        margin-bottom: 10px;
+        margin-top: 40px;
     }
-    /* Kotak Input Gede */
+    /* Gabungin Input & Tombol di satu baris */
+    .search-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        margin-bottom: 20px;
+    }
+    /* Kotak Input */
     .stTextInput > div > div > input {
-        border-radius: 24px;
-        padding: 20px;
-        border: 1px solid #dfe1e5;
-        font-size: 18px;
+        border-radius: 24px 0 0 24px !important;
+        border-right: none !important;
+        padding: 25px !important;
+        font-size: 16px !important;
     }
-    /* Tombol Search Biru Gede */
+    /* Tombol Search di Kanan dengan Logo */
     div.stButton > button {
-        background-color: #1a73e8;
-        color: white;
-        border-radius: 8px;
-        width: 200px;
-        height: 50px;
-        font-weight: bold;
-        display: block;
-        margin: 0 auto;
-    }
-    div.stButton > button:hover {
-        background-color: #1765cc;
-        color: white;
+        background-color: #1a73e8 !important;
+        color: white !important;
+        border-radius: 0 24px 24px 0 !important;
+        height: 52px !important;
+        width: 60px !important;
+        border: none !important;
+        margin-top: 0px !important;
     }
     @keyframes slideFromLeft {
         0% { transform: translateX(-100%); opacity: 0; }
         100% { transform: translateX(0); opacity: 1; }
     }
     .hasil-joko {
-        animation: slideFromLeft 1s ease-out;
+        animation: slideFromLeft 0.8s ease-out;
         display: block;
         margin: 30px auto;
-        max-width: 100%;
-        border-radius: 10px;
+        max-width: 400px;
+        border-radius: 12px;
+        box-shadow: 0 8px 20px rgba(0,0,0,0.1);
     }
     </style>
     """, unsafe_allow_html=True)
 
 # --- TAMPILAN ---
 st.markdown('<div class="joko-header">JOKO SEARCH</div>', unsafe_allow_html=True)
-st.markdown("<p style='text-align: center; color: #70757a;'>Cari apa saja, jawabannya tetap rahasia.</p>", unsafe_allow_html=True)
+st.markdown("<p style='text-align: center; color: #5f6368; margin-bottom: 30px;'>Pusat Informasi Terpercaya (Katanya).</p>", unsafe_allow_html=True)
 
-# Input Box (Bisa ngetik panjang)
-query = st.text_input("", placeholder="Ketik pertanyaan mautmu di sini...", label_visibility="collapsed")
+# Bikin kolom buat nyatuin input & tombol
+col_space, col_input, col_btn, col_space2 = st.columns([1, 4, 0.6, 1])
 
-st.markdown("<br>", unsafe_allow_html=True)
+with col_input:
+    query = st.text_input("", placeholder="Tuliskan rahasia yang ingin Anda tahu...", label_visibility="collapsed")
 
-# Tombol SEARCH (Pasti Kelihatan di Tengah)
-if st.button("CARI JAWABAN"):
-    if query:
-        with st.spinner('Mencari di seluruh database negara...'):
-            time.sleep(1.5)
-        
-        # Bunyi Suara
-        try:
-            play_audio("sound.mp3")
-        except:
-            st.error("File 'sound.mp3' ilang, Faldo!")
-
-        # Muncul Gambar Geser
-        try:
-            with open("sticker.png", "rb") as f:
-                img_data = f.read()
-                img_b64 = base64.b64encode(img_data).decode()
-                st.markdown(f'<img src="data:image/png;base64,{img_b64}" class="hasil-joko">', unsafe_allow_html=True)
-        except:
-            st.warning("### YO NDAK TAU KOK TANYA SAYA!")
-            
-        st.balloons()
-    else:
-        st.warning("Tulis dulu pertanyaannya dong!")
-
-st.markdown("<br><br><p style='text-align: center; font-size: 12px; color: #999;'>© 2026 JOKO SEARCH - Powered by Ketidaktahuan</p>", unsafe_allow_html=True)
+with col_btn:
+    # Pak
